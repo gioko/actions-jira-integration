@@ -51,6 +51,12 @@ const startAction = async (inputJson) => {
     const reportMapperInstance = utils.reportMapper(inputElement, parsedInput, reportPairsMapper, IS_NPM_AUDIT);
     if (!retrievedIssuesSummaries.includes(reportMapperInstance.issueSummary) && !_.isEmpty(retrievedIssuesSummaries)) {
       console.log(`Attempting to create json payload for module ${reportMapperInstance.vulnerabilityName}...`);
+      console.log('Issue Summary');
+      console.log(reportMapperInstance.issueSummary);
+      console.log('Issue Description');
+      console.log(reportMapperInstance.issueDescription);
+      console.log('Issue Severity');
+      console.log(reportMapperInstance.issueSeverity);
       utils.amendHandleBarTemplate(
         config.UTILS.CREATE_JIRA_ISSUE_PAYLOAD_TEMPLATE,
         reportMapperInstance.vulnerabilityName,
@@ -72,15 +78,15 @@ const startAction = async (inputJson) => {
     process.exit(1);
   }
 
-  if (files.length !== 0) {
-    await files.forEach(async (file) => {
-      console.log(`Attempting to create JIRA issue based on payload ${file}...`);
-      const jiraIssue = await jira.createJiraIssue(jiraAuthHeaderValue, fs.readFileSync(`${config.UTILS.PAYLOADS_DIR}/${file}`, 'utf8'));
-      console.log(`Jira issue created: ${jiraIssue.body}`);
-    });
-  } else {
-    console.log('All the vulnerabilities have already been captured as issues on Jira.');
-  }
+  // if (files.length !== 0) {
+  //   await files.forEach(async (file) => {
+  //     console.log(`Attempting to create JIRA issue based on payload ${file}...`);
+  //     const jiraIssue = await jira.createJiraIssue(jiraAuthHeaderValue, fs.readFileSync(`${config.UTILS.PAYLOADS_DIR}/${file}`, 'utf8'));
+  //     console.log(`Jira issue created: ${jiraIssue.body}`);
+  //   });
+  // } else {
+  //   console.log('All the vulnerabilities have already been captured as issues on Jira.');
+  // }
 
   console.log('Attempting to logout from the existing JIRA session...');
   await jira.invalidateJiraSession(jiraAuthHeaderValue);

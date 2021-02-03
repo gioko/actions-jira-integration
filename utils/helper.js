@@ -47,12 +47,16 @@ const reportMapper = (inputElement, parsedInput, reportPairsMapper, isNpmAudit) 
     for (let keyPosition = 0; keyPosition < reportInputVariablesFetcher.length; keyPosition++) {
       const keyName = reportInputVariablesFetcher[keyPosition].replace('{{', '').replace('}}', '');
       if (reportInputVariablesFetcher.length === 1 || firstPass === false) {
+        console.log(`parsedInput1: ${parsedInput[inputElement]}`);
+        console.log(`keyName1: ${keyName}`);
         mapper[reportKey] = reportPairsMapper[reportKey].replace(`{{${keyName}}}`, `${parsedInput[inputElement][keyName]}`);
       } else {
         if (isNpmAudit && keyName === 'overview') {
           const overview = parsedInput[inputElement][keyName];
           mapper[reportKey] = mapper[reportKey].replace(`{{${keyName}}}`, `${overview.slice(0, overview.lastIndexOf('.')).replace(/\n/g, '').replace(/"/g, '')}`);
         } else {
+          console.log(`parsedInput2: ${parsedInput[inputElement]}`);
+          console.log(`keyName2: ${keyName}`);
           mapper[reportKey] = mapper[reportKey].replace(`{{${keyName}}}`, `${parsedInput[inputElement][keyName]}`);
         }
       }
